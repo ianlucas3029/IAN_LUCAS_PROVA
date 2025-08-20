@@ -1,22 +1,6 @@
 <?php
-session_start();
-require_once 'conexao.php';
-
-if (!isset($_SESSION['usuario'])) {
-    header('Location: index.php');
-    exit();
-}
-
-// OBTENDO O NOME DO PERFIL DO USUÁRIO LOGADO
 $id_perfil = $_SESSION['perfil'];
-$sqlPerfil = 'SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil';
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil, PDO::PARAM_INT);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'] ?? '';
 
-// DEFINIÇÃO DAS PERMISSÕES POR PERFIL
 $permissoes = [
     1 => [
         "cadastrar" => [
@@ -60,57 +44,35 @@ $permissoes = [
             "buscar_produto.php"
         ],
         "alterar" => [
-            "alterar_fornecedor.php",
-            "alterar_produto.php"
+                "alterar_fornecedor.php",
+                "alterar_produto.php"
         ],
-        "excluir" => [
-            "excluir_produto.php"
-        ]
+        "excluir" => ["excluir_produto.php"]
     ],
     3 => [
-        "cadastrar" => [
-            'cadastro_fornecedor.php',
-            'cadastro_produto.php'
-        ],
-        "buscar" => [
-            'buscar_cliente.php',
-            "buscar_fornecedor.php",
-            "buscar_produto.php"
-        ],
-        "alterar" => [
-            "alterar_fornecedor.php",
-            "alterar_produto.php"
-        ],
-        "excluir" => [
-            "excluir_produto.php"
-        ]
+        "cadastrar" => ['cadastro_fornecedor.php','cadastro_produto.php'],
+        "buscar" => ['buscar_cliente.php',"buscar_fornecedor.php","buscar_produto.php"],
+        "alterar" => ["alterar_fornecedor.php","alterar_produto.php"],
+        "excluir" => ["excluir_produto.php"]
     ],
     4 => [
-        "cadastrar" => [
-            'cadastro_cliente.php'
-        ],
-        "buscar" => [
-            "buscar_produto.php"
-        ],
-        "alterar" => [
-            "alterar_cliente.php"
-        ]
+        "cadastrar" => ['cadastro_cliente.php'],
+        "buscar" => ["buscar_produto.php"],
+        "alterar" => ["alterar_cliente.php"]
     ]
 ];
 
-// OBTENDO AS OPCOES DISPONIVEIS PARA O PERFIL LGADO
 $opcoes_menu = $permissoes[$id_perfil];
 ?>
-
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
     :root{
       --verde-agua:rgb(54, 184, 177);      /* principal */
       --verde-agua-escuro:#178f86; /* hover */
@@ -173,50 +135,24 @@ $opcoes_menu = $permissoes[$id_perfil];
     nav ul.cascata li ul.cascata li a:hover{
       background: var(--verde-agua-escuro) !important;
     }
-    
-    .logout button {
-    background-color:rgb(50, 206, 185);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-    </style>
-    <script src="script.js"></script>
+  </style>
 </head>
-
 <body>
-    <header>
-        <div class="saudacao">
-            <h2>Bem vindo,<?php echo $_SESSION["usuario"]; ?>! Perfil: <?php
-               echo $nome_perfil; ?></h2>
-        </div>
-
-        <div class="logout">
-            <form action="logout.php" method="post">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </header>
-
-    <nav>
-        <ul class="cascata">
-            <?php foreach($opcoes_menu as $categoria => $arquivos):?>
-                <li class="cascata">
-                    <a href="#"><?=ucfirst($categoria)?></a>
-
-                    <ul class="cascata">
-                    <?php foreach($arquivos as $arquivo):?>
-                        <li>
-                            <a href="<?=$arquivo ?>"><?=ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>    
+  <nav>
+    <ul class="cascata">
+      <?php foreach($opcoes_menu as $categoria => $arquivos): ?>
+        <li class="cascata">
+          <a href="#"><?= ucfirst($categoria) ?></a>
+          <ul class="cascata">
+            <?php foreach($arquivos as $arquivo): ?>
+              <li>
+                <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php"))) ?></a>
+              </li>
             <?php endforeach; ?>
-            </ul>
-    </nav>
+          </ul>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  </nav>
 </body>
 </html>
