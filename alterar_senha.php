@@ -3,7 +3,7 @@ session_start();
 require_once('conexao.php');
 
 // GARANTE QUE O USUÁRIO ESTEJA LOGADO
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     echo "<script>alert('Acesso Negado!');window.location.href='index.php';</script>";
     exit();
 }
