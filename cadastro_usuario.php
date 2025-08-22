@@ -77,6 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 function validar() {
   const nome = document.getElementById('nome').value.trim();
   const senha = document.getElementById('senha').value.trim();
+  
 
   const nomeRegex = /^[A-Za-zÀ-ú\s]+$/;
   if (!nomeRegex.test(nome)) {
