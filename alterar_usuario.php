@@ -113,8 +113,8 @@ function validarAlteracao() {
         return false;
     }
 
-    if (senha !== '' && senha.length < 6) {
-        alert('A nova senha deve ter pelo menos 6 caracteres.');
+    if (senha !== '' && senha.length < 8) {
+        alert('A nova senha deve ter pelo menos 8 caracteres.');
         return false;
     }
 
